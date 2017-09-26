@@ -168,7 +168,8 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 			this._drawTriangle(ctx2, canvas, p);
 		}
 
-		var state = partStates[partNo];
+		// パーツの状態を更新
+		var state = partStates[partNo]; // SsPartState インスタンス
 		state.x = dx;
 		state.y = dy;
 	}
