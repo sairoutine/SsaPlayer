@@ -1,4 +1,8 @@
 'use strict';
+
+// 頂点の枠をデバッグ用に表示するかどうか
+var VERBOSE = false;
+
 function SsAnimation(ssaData, imageList) {
 
 	this.ssaData = ssaData;
@@ -117,27 +121,14 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 
 			ctx.globalCompositeOperation = blendOperations[blend];
 			ctx.globalAlpha = alpha;
-			//ctx.setTransform(1, 0, 0, 1, dx, dy); 		// 最終的な表示位置へ. To display the final position.
 			//ctx.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// 最終的な表示位置へ. To display the final position.
 			ctx.rotate(-dang);
 			ctx.scale(scaleX, scaleY);
 			ctx.translate(vdw / 2,vdh / 2); 	// パーツの原点へ. To the origin of the parts.
 			ctx.scale(fh, fv); 						    	// パーツの中心点でフリップ. Flip at the center point of the parts.
 
-			// check
-			//
-			//      console.log(sx, sy, sw, sh);
-			//      sw = (sx + sw < img.width) ? sw : img.width - sx;
-			//      sh = (sy + sh < img.height) ? sh : img.height - sy;
-			//      sw = (sw < 0) ? 0 : sw;
-			//      sh = (sh < 0) ? 0 : sh;
-			//      sx = (sx < 0) ? 0 : sx;
-			//      sy = (sy < 0) ? 0 : sy;
-			//      console.log(sx, sy, sw, sh);
-
 			ctx.drawImage(img, sx, sy, sw, sh, -vdw/2, -vdh/2, vdw, vdh);
-			//ctx2.drawImage(canvas, dx-ox*rootScaleX, dy-oy*rootScaleY);
-			//ctx2.drawImage(canvas, 
+
 			var ddx = dx-ox*rootScaleX;
 			var ddy = dy-oy*rootScaleY;
 
@@ -159,21 +150,14 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 				(partDataLen > iVertDLX) ? partData[iVertDLX] : 0,
 				(partDataLen > iVertDLY) ? partData[iVertDLY] : 0,
 				(partDataLen > iVertDRX) ? partData[iVertDRX] : 0,
-				(partDataLen > iVertDRY) ? partData[iVertDRY] : 0 ];
+				(partDataLen > iVertDRY) ? partData[iVertDRY] : 0
+			];
 			var p = [
 				new Point(ddx + t[0],ddy + t[1]),
 				new Point(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
 				new Point(ddx + t[4], canvas_size*rootScaleY + ddy + t[5]),
 				new Point(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
 			];
-			/*
-			var p = [
-				new Point(0 + partData[17],0 + partData[18]),
-				new Point(1000 + partData[19], 0 + partData[20]),
-				new Point(0 + partData[21], 1000 + partData[22]),
-				new Point(1000 + partData[23], 1000 + partData[24])
-			];
-			*/
 
 			drawTriangle(ctx2, canvas, p);
 		}
@@ -207,7 +191,11 @@ function drawTriangle (ctx, img, p) {
 	//四角形のパス終了
 
 	ctx.clip(); //以下に描画される画像を、これまで描いた四角形でマスクする
-//ctx.stroke();	
+
+	if (VERBOSE) {
+		ctx.stroke();
+	}
+
 	/*描画空間を変形（変換マトリックスを計算）*/
 	var t1=(p[1].x-p[0].x)/w;
 	var t2=(p[1].y-p[0].y)/w;
@@ -236,7 +224,9 @@ function drawTriangle (ctx, img, p) {
 	// 右下の三角形のパス終了
 
 	ctx.clip(); //以下に描画される画像を、これまで描いた三角形でマスクする
-//ctx.stroke();
+	if (VERBOSE) {
+		ctx.stroke();
+	}
 
 	/*描画空間を変形（変換マトリックスを計算）*/
 	t1=(p[3].x-p[2].x)/w;
