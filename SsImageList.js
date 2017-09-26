@@ -6,11 +6,11 @@ function SsImageList(imageFiles, aFileRoot, loadImmediately, aOnLoad) {
 	this.imagePaths = new Array();
 	this.images = new Array();
 
-	// ƒ[ƒhŠ®—¹‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒN
+	// ãƒ­ãƒ¼ãƒ‰å®Œäº†æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	// Callback that is called when the load is finished.
 	this.onLoad = aOnLoad;
 
-	// ‘S•”“Ç‚İ‚Ü‚ê‚½ê‡‚Ì‚İƒ†[ƒU[‚ªİ’è‚µ‚½ƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ô
+	// å…¨éƒ¨èª­ã¿è¾¼ã¾ã‚ŒãŸå ´åˆã®ã¿ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒè¨­å®šã—ãŸã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
 	// Only when it is all loaded, is called a callback set by the user.
 	this.onLoad_ = function () {
 		for (var i in this.images)
@@ -34,14 +34,14 @@ function SsImageList(imageFiles, aFileRoot, loadImmediately, aOnLoad) {
 	}
 }
 
-// w’è‚µ‚½ƒCƒ“ƒfƒbƒNƒX‚ÌImage‚ğ•Ô‚·
+// æŒ‡å®šã—ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®Imageã‚’è¿”ã™
 // Get image at specified index.
 SsImageList.prototype.getImage = function (index) {
 	if (index < 0 || index >= this.images.length) return null;
 	return this.images[index];
 }
 
-// w’è‚µ‚½ƒCƒ“ƒfƒbƒNƒX‚Ì‰æ‘œ‚ğimagePath‚Å·‚µ‘Ö‚¦‚éB
+// æŒ‡å®šã—ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ç”»åƒã‚’imagePathã§å·®ã—æ›¿ãˆã‚‹ã€‚
 // Replace image of specified index at imagePath.
 SsImageList.prototype.setImage = function (index, imagePath) {
 	if (index < 0 || index >= this.images.length) return null;
@@ -50,7 +50,7 @@ SsImageList.prototype.setImage = function (index, imagePath) {
 	this.images[index].src = this.imagePaths[index];
 }
 
-// ƒ[ƒhŠ®—¹ƒR[ƒ‹ƒoƒbƒN‚ğİ’è‚·‚é
+// ãƒ­ãƒ¼ãƒ‰å®Œäº†æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¨­å®šã™ã‚‹
 // Set a callback when load is finished.
 SsImageList.prototype.setOnLoad = function (cb) {
 	this.onLoad = cb;

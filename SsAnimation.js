@@ -11,31 +11,31 @@ function SsAnimation(ssaData, imageList) {
 	}
 }
 
-// ‚±‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÌFPS
+// ã“ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®FPS
 // This animation FPS.
 SsAnimation.prototype.getFPS = function () {
 	return this.ssaData.fps;
 }
 
-// ƒg[ƒ^ƒ‹ƒtƒŒ[ƒ€”‚ğ•Ô‚·
+// ãƒˆãƒ¼ã‚¿ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’è¿”ã™
 // Get total frame count.
 SsAnimation.prototype.getFrameCount = function () {
 	return this.ssaData.ssa.length;
 }
 
-// ƒp[ƒcƒŠƒXƒg‚ğ•Ô‚·
+// ãƒ‘ãƒ¼ãƒ„ãƒªã‚¹ãƒˆã‚’è¿”ã™
 // Get parts list.
 SsAnimation.prototype.getParts = function () {
 	return this.ssaData.parts;
 }
 
-// ƒp[ƒc–¼‚©‚çNo‚ğæ“¾‚·‚éƒ}ƒbƒv‚ğ•Ô‚·
+// ãƒ‘ãƒ¼ãƒ„åã‹ã‚‰Noã‚’å–å¾—ã™ã‚‹ãƒãƒƒãƒ—ã‚’è¿”ã™
 // Return the map, to get the parts from number.
 SsAnimation.prototype.getPartsMap = function () {
 	return this.partsMap;
 }
 
-// •`‰æƒƒ\ƒbƒh
+// æç”»ãƒ¡ã‚½ãƒƒãƒ‰
 // Draw method.
 SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, partStates, rootScaleX, rootScaleY) {
 
@@ -117,12 +117,12 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 
 			ctx.globalCompositeOperation = blendOperations[blend];
 			ctx.globalAlpha = alpha;
-			//ctx.setTransform(1, 0, 0, 1, dx, dy); 		// ÅI“I‚È•\¦ˆÊ’u‚Ö. To display the final position.
-			//ctx.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// ÅI“I‚È•\¦ˆÊ’u‚Ö. To display the final position.
+			//ctx.setTransform(1, 0, 0, 1, dx, dy); 		// æœ€çµ‚çš„ãªè¡¨ç¤ºä½ç½®ã¸. To display the final position.
+			//ctx.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// æœ€çµ‚çš„ãªè¡¨ç¤ºä½ç½®ã¸. To display the final position.
 			ctx.rotate(-dang);
 			ctx.scale(scaleX, scaleY);
-			ctx.translate(vdw / 2,vdh / 2); 	// ƒp[ƒc‚ÌŒ´“_‚Ö. To the origin of the parts.
-			ctx.scale(fh, fv); 						    	// ƒp[ƒc‚Ì’†S“_‚ÅƒtƒŠƒbƒv. Flip at the center point of the parts.
+			ctx.translate(vdw / 2,vdh / 2); 	// ãƒ‘ãƒ¼ãƒ„ã®åŸç‚¹ã¸. To the origin of the parts.
+			ctx.scale(fh, fv); 						    	// ãƒ‘ãƒ¼ãƒ„ã®ä¸­å¿ƒç‚¹ã§ãƒ•ãƒªãƒƒãƒ—. Flip at the center point of the parts.
 
 			// check
 			//
@@ -150,7 +150,7 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 			var iVertDRX = 23;
 			var iVertDRY = 24;
 
-			// ’¸“_•ÏŒ`À•W
+			// é ‚ç‚¹å¤‰å½¢åº§æ¨™
 			var t = [
                     (partDataLen > iVertULX) ? partData[iVertULX] : 0,
                     (partDataLen > iVertULY) ? partData[iVertULY] : 0,
@@ -184,7 +184,7 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 	}
 }
 
-//PointƒNƒ‰ƒX
+//Pointã‚¯ãƒ©ã‚¹
 function Point (x, y) {
 	this.x = x;
 	this.y = y;
@@ -194,9 +194,9 @@ function Point (x, y) {
 function drawTriangle (ctx, img, p) {
 	var w = img.width;
 	var h = img.height;
-	//ƒZƒOƒƒ“ƒg1
+	//ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ1
 	ctx.save();
-	//lŠpŒ`‚ÌƒpƒX‚ğ•`‚­
+	//å››è§’å½¢ã®ãƒ‘ã‚¹ã‚’æã
 	ctx.beginPath();
 	ctx.strokeStyle = "yellow";
 	ctx.moveTo(p[0].x, p[0].y);
@@ -204,11 +204,11 @@ function drawTriangle (ctx, img, p) {
 	ctx.lineTo(p[3].x, p[3].y);
 	ctx.lineTo(p[2].x, p[2].y);
 	ctx.closePath();
-	//lŠpŒ`‚ÌƒpƒXI—¹
+	//å››è§’å½¢ã®ãƒ‘ã‚¹çµ‚äº†
 	
-	ctx.clip(); //ˆÈ‰º‚É•`‰æ‚³‚ê‚é‰æ‘œ‚ğA‚±‚ê‚Ü‚Å•`‚¢‚½lŠpŒ`‚Åƒ}ƒXƒN‚·‚é
+	ctx.clip(); //ä»¥ä¸‹ã«æç”»ã•ã‚Œã‚‹ç”»åƒã‚’ã€ã“ã‚Œã¾ã§æã„ãŸå››è§’å½¢ã§ãƒã‚¹ã‚¯ã™ã‚‹
 //ctx.stroke();	
-	/*•`‰æ‹óŠÔ‚ğ•ÏŒ`i•ÏŠ·ƒ}ƒgƒŠƒbƒNƒX‚ğŒvZj*/
+	/*æç”»ç©ºé–“ã‚’å¤‰å½¢ï¼ˆå¤‰æ›ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã‚’è¨ˆç®—ï¼‰*/
 	var t1=(p[1].x-p[0].x)/w;
 	var t2=(p[1].y-p[0].y)/w;
 	var t3=(p[2].x-p[0].x)/h; 
@@ -216,29 +216,29 @@ function drawTriangle (ctx, img, p) {
 	var t5=p[0].x;
 	var t6=p[0].y;
 	
-	//ã‹L‚Ìt1`t6‚ÌŒvZŒ‹‰Ê‚Å•`‰æ‹óŠÔ‚ğ•ÏŒ`‚³‚¹‚é
+	//ä¸Šè¨˜ã®t1ã€œt6ã®è¨ˆç®—çµæœã§æç”»ç©ºé–“ã‚’å¤‰å½¢ã•ã›ã‚‹
 	ctx.setTransform(t1,t2,t3,t4,t5,t6);
 	
-	//•ÏŒ`‚µ‚½‹óŠÔ‚É‰æ‘œiÊ^j‚ğ”z’u
+	//å¤‰å½¢ã—ãŸç©ºé–“ã«ç”»åƒï¼ˆå†™çœŸï¼‰ã‚’é…ç½®
 	ctx.drawImage(img, 0,0);
 	
-	ctx.restore(); //ƒNƒŠƒbƒviƒ}ƒXƒNj—Ìˆæ‚ğƒŠƒZƒbƒg
+	ctx.restore(); //ã‚¯ãƒªãƒƒãƒ—ï¼ˆãƒã‚¹ã‚¯ï¼‰é ˜åŸŸã‚’ãƒªã‚»ãƒƒãƒˆ
 	
-	//ƒZƒOƒƒ“ƒg2
+	//ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ2
 	ctx.save();
-	// ‰E‰º‚ÌOŠpŒ`‚ğ•`‚­
+	// å³ä¸‹ã®ä¸‰è§’å½¢ã‚’æã
 	ctx.beginPath();
 	ctx.strokeStyle = "red";
 	ctx.moveTo(p[1].x, p[1].y);
 	ctx.lineTo(p[2].x, p[2].y);
 	ctx.lineTo(p[3].x, p[3].y);
 	ctx.closePath();
-	// ‰E‰º‚ÌOŠpŒ`‚ÌƒpƒXI—¹
+	// å³ä¸‹ã®ä¸‰è§’å½¢ã®ãƒ‘ã‚¹çµ‚äº†
 	
-	ctx.clip(); //ˆÈ‰º‚É•`‰æ‚³‚ê‚é‰æ‘œ‚ğA‚±‚ê‚Ü‚Å•`‚¢‚½OŠpŒ`‚Åƒ}ƒXƒN‚·‚é
+	ctx.clip(); //ä»¥ä¸‹ã«æç”»ã•ã‚Œã‚‹ç”»åƒã‚’ã€ã“ã‚Œã¾ã§æã„ãŸä¸‰è§’å½¢ã§ãƒã‚¹ã‚¯ã™ã‚‹
 //ctx.stroke();	
 	
-	/*•`‰æ‹óŠÔ‚ğ•ÏŒ`i•ÏŠ·ƒ}ƒgƒŠƒbƒNƒX‚ğŒvZj*/
+	/*æç”»ç©ºé–“ã‚’å¤‰å½¢ï¼ˆå¤‰æ›ãƒãƒˆãƒªãƒƒã‚¯ã‚¹ã‚’è¨ˆç®—ï¼‰*/
 	t1=(p[3].x-p[2].x)/w;
 	t2=(p[3].y-p[2].y)/w;
 	t3=(p[3].x-p[1].x)/h;
@@ -246,13 +246,13 @@ function drawTriangle (ctx, img, p) {
 	t5=p[2].x;
 	t6=p[2].y;
 	
-	//ã‹L‚Ìt1`t6‚ÌŒvZŒ‹‰Ê‚Å•`‰æ‹óŠÔ‚ğ•ÏŒ`‚³‚¹‚é
+	//ä¸Šè¨˜ã®t1ã€œt6ã®è¨ˆç®—çµæœã§æç”»ç©ºé–“ã‚’å¤‰å½¢ã•ã›ã‚‹
 	ctx.setTransform(t1,t2,t3,t4,t5,t6);
 
-	//•ÏŒ`‚µ‚½‹óŠÔ‚É‰æ‘œiÊ^j‚ğ”z’u
+	//å¤‰å½¢ã—ãŸç©ºé–“ã«ç”»åƒï¼ˆå†™çœŸï¼‰ã‚’é…ç½®
 	ctx.drawImage(img, 0, 0-h);
 	
-	ctx.restore(); //ƒNƒŠƒbƒviƒ}ƒXƒNj—Ìˆæ‚ğƒŠƒZƒbƒg
+	ctx.restore(); //ã‚¯ãƒªãƒƒãƒ—ï¼ˆãƒã‚¹ã‚¯ï¼‰é ˜åŸŸã‚’ãƒªã‚»ãƒƒãƒˆ
 	
 }
 	

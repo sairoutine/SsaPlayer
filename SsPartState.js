@@ -1,13 +1,13 @@
 'use strict';
 function SsPartState(name) {
 
-	// ƒp[ƒc–¼
+	// ãƒ‘ãƒ¼ãƒ„å
 	// Parts name.
 	this.name = name;
-	// Œ»Ý‚Ì•`‰æXƒ|ƒWƒVƒ‡ƒ“
+	// ç¾åœ¨ã®æç”»Xãƒã‚¸ã‚·ãƒ§ãƒ³
 	// Current x position at drawing.
 	this.x = 0;
-	// Œ»Ý‚Ì•`‰æYƒ|ƒWƒVƒ‡ƒ“
+	// ç¾åœ¨ã®æç”»Yãƒã‚¸ã‚·ãƒ§ãƒ³
 	// Current x position at drawing.
 	this.y = 0;
 }

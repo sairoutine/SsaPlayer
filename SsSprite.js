@@ -4,7 +4,7 @@ var SsPartState = require("./SsPartState");
 
 function SsSprite(animation) {
 
-	// ƒvƒ‰ƒCƒx[ƒg•Ï”
+	// ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆå¤‰æ•°
 	// Private variables.
 	this.inner = {
 		animation: animation,
@@ -32,15 +32,15 @@ function SsSprite(animation) {
 	this.inner.initPartStates();
 }
 
-// •`‰æXƒ|ƒWƒVƒ‡ƒ“
+// æç”»Xãƒã‚¸ã‚·ãƒ§ãƒ³
 // X position at drawing.
 SsSprite.prototype.x = 0;
 
-// •`‰æYƒ|ƒWƒVƒ‡ƒ“
+// æç”»Yãƒã‚¸ã‚·ãƒ§ãƒ³
 // Y position at drawing
 SsSprite.prototype.y = 0;
 
-// ¦–¢À‘•
+// â€»æœªå®Ÿè£…
 // *Not implemented.
 SsSprite.prototype.flipH = false;
 SsSprite.prototype.flipV = false;
@@ -49,7 +49,7 @@ SsSprite.prototype.flipV = false;
 SsSprite.prototype.rootScaleX = 1.0;
 SsSprite.prototype.rootScaleY = 1.0;
 
-// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìİ’è
+// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
 // Set animation.
 SsSprite.prototype.setAnimation = function (animation) {
 	this.inner.animation = animation;
@@ -59,69 +59,69 @@ SsSprite.prototype.setAnimation = function (animation) {
 	this.clearLoopCount();
 }
 
-// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìæ“¾
+// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å–å¾—
 // Get animation.
 SsSprite.prototype.getAnimation = function () {
 	return this.inner.animation;
 }
 
-// Ä¶ƒtƒŒ[ƒ€No‚ğİ’è
+// å†ç”Ÿãƒ•ãƒ¬ãƒ¼ãƒ Noã‚’è¨­å®š
 // Set frame no of playing.
 SsSprite.prototype.setFrameNo = function (frameNo) {
 	this.inner.playingFrame = frameNo;
 	this.inner.prevDrawnTime = 0;
 }
 
-// Ä¶ƒtƒŒ[ƒ€No‚ğæ“¾
+// å†ç”Ÿãƒ•ãƒ¬ãƒ¼ãƒ Noã‚’å–å¾—
 // Get frame no of playing.
 SsSprite.prototype.getFrameNo = function () {
 	return this.inner.playingFrame >> 0;
 }
 
-// Ä¶ƒXƒs[ƒh‚ğİ’è (1:•W€)
+// å†ç”Ÿã‚¹ãƒ”ãƒ¼ãƒ‰ã‚’è¨­å®š (1:æ¨™æº–)
 // Set speed to play. (1:normal speed)
 SsSprite.prototype.setStep = function (step) {
 	this.inner.step = step;
 }
 
-// Ä¶ƒXƒs[ƒh‚ğæ“¾
+// å†ç”Ÿã‚¹ãƒ”ãƒ¼ãƒ‰ã‚’å–å¾—
 // Get speed to play. (1:normal speed)
 SsSprite.prototype.getStep = function () {
 	return this.inner.step;
 }
 
-// ƒ‹[ƒv‰ñ”‚Ìİ’è (0:–³ŒÀ)
+// ãƒ«ãƒ¼ãƒ—å›æ•°ã®è¨­å®š (0:ç„¡é™)
 // Set a playback loop count.  (0:infinite)
 SsSprite.prototype.setLoop = function (loop) {
 	if (loop < 0) return;
 	this.inner.loop = loop;
 }
 
-// ƒ‹[ƒv‰ñ”‚Ìİ’è‚ğæ“¾
+// ãƒ«ãƒ¼ãƒ—å›æ•°ã®è¨­å®šã‚’å–å¾—
 // Get a playback loop count of specified. (0:infinite)
 SsSprite.prototype.getLoop = function () {
 	return this.inner.loop;
 }
 
-// Œ»İ‚ÌÄ¶‰ñ”‚ğæ“¾
+// ç¾åœ¨ã®å†ç”Ÿå›æ•°ã‚’å–å¾—
 // Get repeat count a playback.
 SsSprite.prototype.getLoopCount = function () {
 	return this.inner.loopCount;
 }
 
-// Œ»İ‚ÌÄ¶‰ñ”‚ğƒNƒŠƒA
+// ç¾åœ¨ã®å†ç”Ÿå›æ•°ã‚’ã‚¯ãƒªã‚¢
 // Clear repeat count a playback.
 SsSprite.prototype.clearLoopCount = function () {
 	this.inner.loopCount = 0;
 }
 
-// ƒAƒjƒ[ƒVƒ‡ƒ“I—¹‚ÌƒR[ƒ‹ƒoƒbƒN‚ğİ’è
+// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¨­å®š
 // Set the call back at the end of animation.
 SsSprite.prototype.setEndCallBack = function (func) {
 	this.inner.endCallBack = func;
 }
 
-// ƒp[ƒc‚Ìó‘ÔiŒ»İ‚ÌX,YÀ•W‚È‚Çj‚ğæ“¾
+// ãƒ‘ãƒ¼ãƒ„ã®çŠ¶æ…‹ï¼ˆç¾åœ¨ã®X,Yåº§æ¨™ãªã©ï¼‰ã‚’å–å¾—
 // Gets the state of the parts. (Current x and y positions)
 SsSprite.prototype.getPartState = function (name) {
 	if (this.inner.partStates == null) return null;
@@ -132,14 +132,14 @@ SsSprite.prototype.getPartState = function (name) {
 	return this.inner.partStates[partNo];
 }
 
-// •`‰æÀs
+// æç”»å®Ÿè¡Œ
 // Drawing method.
 SsSprite.prototype.draw = function (ctx, currentTime) {
 
 	if (this.inner.animation == null) return;
 
 	if (this.inner.loop == 0 || this.inner.loop > this.inner.loopCount) {
-		// ƒtƒŒ[ƒ€‚ği‚ß‚é
+		// ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’é€²ã‚ã‚‹
 		// To next frame.
 		if (this.inner.prevDrawnTime > 0) {
 
@@ -150,19 +150,19 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 
 			if (this.inner.step >= 0) {
 				if (this.inner.playingFrame >= this.inner.animation.getFrameCount()) {
-					// ƒ‹[ƒv‰ñ”XV
+					// ãƒ«ãƒ¼ãƒ—å›æ•°æ›´æ–°
 					// Update repeat count.
 					this.inner.loopCount += c;
 					if (this.inner.loop == 0 || this.inner.loopCount < this.inner.loop) {
-						// ƒtƒŒ[ƒ€”Ô†XVAÄ¶‚ğ‘±‚¯‚é
+						// ãƒ•ãƒ¬ãƒ¼ãƒ ç•ªå·æ›´æ–°ã€å†ç”Ÿã‚’ç¶šã‘ã‚‹
 						// Update frame no, and playing.
 						this.inner.playingFrame %= this.inner.animation.getFrameCount();
 					}
 					else {
-						// Ä¶’â~AÅIƒtƒŒ[ƒ€‚Ö
+						// å†ç”Ÿåœæ­¢ã€æœ€çµ‚ãƒ•ãƒ¬ãƒ¼ãƒ ã¸
 						// Stop animation, to last frame.
 						this.inner.playingFrame = this.inner.animation.getFrameCount() - 1;
-						// ’â~ƒR[ƒ‹ƒoƒbƒNŒÄ‚Ño‚µ
+						// åœæ­¢æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼ã³å‡ºã—
 						// Call finished callback.
 						if (this.inner.endCallBack != null) {
 							this.inner.endCallBack();
@@ -172,20 +172,20 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 			}
 			else {
 				if (this.inner.playingFrame < 0) {
-					// ƒ‹[ƒv‰ñ”XV
+					// ãƒ«ãƒ¼ãƒ—å›æ•°æ›´æ–°
 					// Update repeat count.
 					this.inner.loopCount += 1 + -c;
 					if (this.inner.loop == 0 || this.inner.loopCount < this.inner.loop) {
-						// ƒtƒŒ[ƒ€”Ô†XVAÄ¶‚ğ‘±‚¯‚é
+						// ãƒ•ãƒ¬ãƒ¼ãƒ ç•ªå·æ›´æ–°ã€å†ç”Ÿã‚’ç¶šã‘ã‚‹
 						// Update frame no, and playing.
 						this.inner.playingFrame %= this.inner.animation.getFrameCount();
 						if (this.inner.playingFrame < 0) this.inner.playingFrame += this.inner.animation.getFrameCount();
 					}
 					else {
-						// Ä¶’â~Aæ“ªƒtƒŒ[ƒ€‚Ö
+						// å†ç”Ÿåœæ­¢ã€å…ˆé ­ãƒ•ãƒ¬ãƒ¼ãƒ ã¸
 						// Stop animation, to first frame.
 						this.inner.playingFrame = 0;
-						// ’â~ƒR[ƒ‹ƒoƒbƒNŒÄ‚Ño‚µ
+						// åœæ­¢æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼ã³å‡ºã—
 						// Call finished callback.
 						if (this.inner.endCallBack != null) {
 							this.inner.endCallBack();
@@ -197,7 +197,7 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 		}
 	}
 	//else {
-	//	// Ä¶’â~
+	//	// å†ç”Ÿåœæ­¢
 	//	// Stop animation.
 	//	this.inner.playingFrame = 0;
 	//}
