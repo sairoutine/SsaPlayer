@@ -1,42 +1,48 @@
 'use strict';
 
+var SsPoint = require("./SsPoint");
+
 // 頂点の枠をデバッグ用に表示するかどうか
 var VERBOSE = false;
 
+/*
+ * ssaData: SpriteStudio が出力したJSONデータ
+ * imageList: SsImageList インスタンス
+ */
 function SsAnimation(ssaData, imageList) {
 
-	this.ssaData = ssaData;
-	this.imageList = imageList;
+	this._ssaData = ssaData;
+	this._imageList = imageList;
 
-	this.partsMap = [];
-	this.parts = ssaData.parts;
-	for (var i = 0; i < this.parts.length; i++) {
-		this.partsMap[this.parts[i]] = i;
+	this._partsMap = {};
+
+	for (var i = 0; i < ssaData.parts.length; i++) {
+		this._partsMap[ssaData.parts[i]] = i;
 	}
 }
 
 // このアニメーションのFPS
 // This animation FPS.
 SsAnimation.prototype.getFPS = function () {
-	return this.ssaData.fps;
+	return this._ssaData.fps;
 };
 
 // トータルフレーム数を返す
 // Get total frame count.
 SsAnimation.prototype.getFrameCount = function () {
-	return this.ssaData.ssa.length;
+	return this._ssaData.ssa.length;
 };
 
 // パーツリストを返す
 // Get parts list.
 SsAnimation.prototype.getParts = function () {
-	return this.ssaData.parts;
+	return this._ssaData.parts;
 };
 
 // パーツ名からNoを取得するマップを返す
 // Return the map, to get the parts from number.
 SsAnimation.prototype.getPartsMap = function () {
-	return this.partsMap;
+	return this._partsMap;
 };
 
 // 描画メソッド
@@ -68,14 +74,14 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 		"source-over"
 	);
 
-	var frameData = this.ssaData.ssa[frameNo];
+	var frameData = this._ssaData.ssa[frameNo];
 	for (var refNo = 0; refNo < frameData.length; refNo++) {
 
 		var partData = frameData[refNo];
 		var partDataLen = partData.length;
 
 		var partNo = partData[iPartNo];
-		var img = this.imageList.getImage(partData[iImageNo]);
+		var img = this._imageList.getImage(partData[iImageNo]);
 		var sx = partData[iSouX];
 		var sy = partData[iSouY];
 		var sw = partData[iSouW];
@@ -153,13 +159,13 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 				(partDataLen > iVertDRY) ? partData[iVertDRY] : 0
 			];
 			var p = [
-				new Point(ddx + t[0],ddy + t[1]),
-				new Point(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
-				new Point(ddx + t[4], canvas_size*rootScaleY + ddy + t[5]),
-				new Point(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
+				new SsPoint(ddx + t[0],ddy + t[1]),
+				new SsPoint(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
+				new SsPoint(ddx + t[4], canvas_size*rootScaleY + ddy + t[5]),
+				new SsPoint(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
 			];
 
-			drawTriangle(ctx2, canvas, p);
+			this._drawTriangle(ctx2, canvas, p);
 		}
 
 		var state = partStates[partNo];
@@ -168,14 +174,7 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 	}
 };
 
-//Pointクラス
-function Point (x, y) {
-	this.x = x;
-	this.y = y;
-	return {x:this.x, y:this.y};
-}
-
-function drawTriangle (ctx, img, p) {
+SsAnimation.prototype._drawTriangle = function(ctx, img, p) {
 	var w = img.width;
 	var h = img.height;
 	//セグメント1
@@ -244,6 +243,6 @@ function drawTriangle (ctx, img, p) {
 
 	ctx.restore(); //クリップ（マスク）領域をリセット
 
-}
+};
 
 module.exports = SsAnimation;
