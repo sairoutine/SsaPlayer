@@ -158,13 +158,12 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 	// 初回の描画は再生フレームNoを変更しない
 	if (this._inner.prevDrawnTime === 0) return;
 
-	// フレームを進める
+	// 再生フレームNoを進める
 	// To next frame.
-	// TOOD: 何してる？
-	var s = (currentTime - this._inner.prevDrawnTime) / (1000 / this._inner.animation.getFPS());
+	var s = this._inner.animation.getFPS() * (currentTime - this._inner.prevDrawnTime) / 1000;
 	this._inner.playingFrame += s * this.step;
 
-	// TOOD: 何してる？ この描画で実行するループ回数
+	// この描画実行でループ回数が何回進んだか
 	var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
 
 	if (this.step >= 0) { // 再生速度があれば
