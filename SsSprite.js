@@ -21,7 +21,7 @@ function SsSprite(animation) {
 	this.rootScaleY = 1.0;
 
 	// 再生スピード
-	this.step = 0; //1
+	this.step = 1;
 
 	// ループ回数(0: infinite)
 	this.loop = 0;
@@ -130,6 +130,11 @@ SsSprite.prototype.getPartState = function (name) {
 	return this._inner.partStates[partNo];
 };
 
+// ループ再生が終了したか否か
+SsSprite.prototype.isEndLoop = function () {
+	return this.loop !== 0 && this.loop <= this._inner.loopCount;
+};
+
 // 描画実行
 // Drawing method.
 SsSprite.prototype.draw = function (ctx, currentTime) {
@@ -147,9 +152,8 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 };
 
 SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
-	// ループ回数に指定があって、かつ指定ループ回数だけ再生を終えていたら、それ以上再生フレームNoを変更しない
-	// TODO: 関数化
-	if (this.loop !== 0 && this.loop <= this._inner.loopCount) return;
+	// 指定ループ回数だけ再生を終えていたら、それ以上再生フレームNoを変更しない
+	if (this.isEndLoop()) return;
 
 	// 初回の描画は再生フレームNoを変更しない
 	if (this._inner.prevDrawnTime === 0) return;
@@ -159,8 +163,6 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 	// TOOD: 何してる？
 	var s = (currentTime - this._inner.prevDrawnTime) / (1000 / this._inner.animation.getFPS());
 	this._inner.playingFrame += s * this.step;
-
-
 
 	// TOOD: 何してる？ この描画で実行するループ回数
 	var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
@@ -173,7 +175,7 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 		// Update repeat count.
 		this._inner.loopCount += c;
 
-		if (this.loop === 0 || this.loop > this._inner.loopCount) { //再生を続ける場合
+		if (!this.isEndLoop()) { //再生を続ける場合
 			// TOOD: 何してる？
 			// フレーム番号更新、再生を続ける
 			// Update frame no, and playing.
@@ -199,7 +201,7 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 		// Update repeat count.
 		this._inner.loopCount += 1 + -c;
 
-		if (this.loop === 0 || this.loop > this._inner.loopCount) { // 再生を続ける場合
+		if (!this.isEndLoop()) { //再生を続ける場合
 			// フレーム番号更新、再生を続ける
 			// Update frame no, and playing.
 			this._inner.playingFrame %= this._inner.animation.getFrameCount();
