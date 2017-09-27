@@ -21,7 +21,7 @@ function SsSprite(animation) {
 	this.rootScaleY = 1.0;
 
 	// 再生スピード
-	this.step = 1;
+	this.step = 0; //1
 
 	// ループ回数(0: infinite)
 	this.loop = 0;
@@ -147,69 +147,79 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 };
 
 SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
-	if (this.loop === 0 || this.loop > this._inner.loopCount) {
-		// フレームを進める
-		// To next frame.
-		if (this._inner.prevDrawnTime > 0) {
+	// ループ回数に指定があって、かつ指定ループ回数だけ再生を終えていたら、それ以上再生フレームNoを変更しない
+	// TODO: 関数化
+	if (this.loop !== 0 && this.loop <= this._inner.loopCount) return;
 
-			var s = (currentTime - this._inner.prevDrawnTime) / (1000 / this._inner.animation.getFPS());
-			this._inner.playingFrame += s * this.step;
+	// 初回の描画は再生フレームNoを変更しない
+	if (this._inner.prevDrawnTime === 0) return;
 
-			var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
+	// フレームを進める
+	// To next frame.
+	// TOOD: 何してる？
+	var s = (currentTime - this._inner.prevDrawnTime) / (1000 / this._inner.animation.getFPS());
+	this._inner.playingFrame += s * this.step;
 
-			if (this.step >= 0) {
-				if (this._inner.playingFrame >= this._inner.animation.getFrameCount()) {
-					// ループ回数更新
-					// Update repeat count.
-					this._inner.loopCount += c;
-					if (this.loop === 0 || this._inner.loopCount < this.loop) {
-						// フレーム番号更新、再生を続ける
-						// Update frame no, and playing.
-						this._inner.playingFrame %= this._inner.animation.getFrameCount();
-					}
-					else {
-						// 再生停止、最終フレームへ
-						// Stop animation, to last frame.
-						this._inner.playingFrame = this._inner.animation.getFrameCount() - 1;
-						// 停止時コールバック呼び出し
-						// Call finished callback.
-						if (this._inner.endCallBack) {
-							this._inner.endCallBack();
-						}
-					}
-				}
+
+
+	// TOOD: 何してる？ この描画で実行するループ回数
+	var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
+
+	if (this.step >= 0) { // 再生速度があれば
+		// TOOD: 何してる？
+		if (this._inner.playingFrame < this._inner.animation.getFrameCount()) return;
+
+		// ループ回数更新
+		// Update repeat count.
+		this._inner.loopCount += c;
+
+		if (this.loop === 0 || this.loop > this._inner.loopCount) { //再生を続ける場合
+			// TOOD: 何してる？
+			// フレーム番号更新、再生を続ける
+			// Update frame no, and playing.
+			this._inner.playingFrame %= this._inner.animation.getFrameCount();
+		}
+		else { //再生が終わる場合
+			// 再生停止、最終フレームへ
+			// Stop animation, to last frame.
+			this._inner.playingFrame = this._inner.animation.getFrameCount() - 1;
+
+			// 停止時コールバック呼び出し
+			// Call finished callback.
+			if (this._inner.endCallBack) {
+				this._inner.endCallBack();
 			}
-			else {
-				if (this._inner.playingFrame < 0) {
-					// ループ回数更新
-					// Update repeat count.
-					this._inner.loopCount += 1 + -c;
-					if (this.loop === 0 || this._inner.loopCount < this.loop) {
-						// フレーム番号更新、再生を続ける
-						// Update frame no, and playing.
-						this._inner.playingFrame %= this._inner.animation.getFrameCount();
-						if (this._inner.playingFrame < 0) this._inner.playingFrame += this._inner.animation.getFrameCount();
-					}
-					else {
-						// 再生停止、先頭フレームへ
-						// Stop animation, to first frame.
-						this._inner.playingFrame = 0;
-						// 停止時コールバック呼び出し
-						// Call finished callback.
-						if (this._inner.endCallBack) {
-							this._inner.endCallBack();
-						}
-					}
-				}
-			}
-
 		}
 	}
-	//else {
-	//	// 再生停止
-	//	// Stop animation.
-	//	this._inner.playingFrame = 0;
-	//}
+	else {
+		// TODO: 何してる？
+		if (this._inner.playingFrame >= 0) return;
+
+		// ループ回数更新
+		// Update repeat count.
+		this._inner.loopCount += 1 + -c;
+
+		if (this.loop === 0 || this.loop > this._inner.loopCount) { // 再生を続ける場合
+			// フレーム番号更新、再生を続ける
+			// Update frame no, and playing.
+			this._inner.playingFrame %= this._inner.animation.getFrameCount();
+
+			if (this._inner.playingFrame < 0) {
+				this._inner.playingFrame += this._inner.animation.getFrameCount();
+			}
+		}
+		else { // 再生が終わる場合
+			// 再生停止、先頭フレームへ
+			// Stop animation, to first frame.
+			this._inner.playingFrame = 0;
+
+			// 停止時コールバック呼び出し
+			// Call finished callback.
+			if (this._inner.endCallBack) {
+				this._inner.endCallBack();
+			}
+		}
+	}
 };
 
 
