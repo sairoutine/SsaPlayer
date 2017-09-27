@@ -136,6 +136,17 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 
 	if (!this._inner.animation) return;
 
+	// 描画する 再生フレームNo を更新
+	this._updatePlayingFrameNo(currentTime);
+
+	// 描画した時刻を更新
+	this._inner.prevDrawnTime = currentTime;
+
+	// 描画
+	this._inner.animation.drawFunc(ctx, this.getFrameNo(), this.x, this.y, this.flipH, this.flipV, this._inner.partStates, this.rootScaleX, this.rootScaleY);
+};
+
+SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 	if (this.loop === 0 || this.loop > this._inner.loopCount) {
 		// フレームを進める
 		// To next frame.
@@ -199,11 +210,8 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 	//	// Stop animation.
 	//	this._inner.playingFrame = 0;
 	//}
-
-	this._inner.prevDrawnTime = currentTime;
-
-	this._inner.animation.drawFunc(ctx, this.getFrameNo(), this.x, this.y, this.flipH, this.flipV, this._inner.partStates, this.rootScaleX, this.rootScaleY);
 };
+
 
 SsSprite.prototype._initPartStates = function () {
 	this._inner.partStates = null;
