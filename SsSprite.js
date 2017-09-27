@@ -20,15 +20,15 @@ function SsSprite(animation) {
 	this.rootScaleX = 1.0;
 	this.rootScaleY = 1.0;
 
+	// 再生スピード
+	this.step = 1;
+
+	// ループ回数(0: infinite)
+	this.loop = 0;
 
 	// プライベート変数
 	// Private variables.
 	this._inner = {
-		// 再生スピード
-		step: 1,
-		// ループ回数(0: infinite)
-		loop: 0,
-
 		// SsAnimation インスタンス
 		animation: animation,
 		// 再生フレームNo
@@ -40,6 +40,7 @@ function SsSprite(animation) {
 		// draw end callback
 		endCallBack: null,
 
+		// 各パーツの位置
 		partStates: null,
 	};
 
@@ -78,26 +79,26 @@ SsSprite.prototype.getFrameNo = function () {
 // 再生スピードを設定 (1:標準)
 // Set speed to play. (1:normal speed)
 SsSprite.prototype.setStep = function (step) {
-	this._inner.step = step;
+	this.step = step;
 };
 
 // 再生スピードを取得
 // Get speed to play. (1:normal speed)
 SsSprite.prototype.getStep = function () {
-	return this._inner.step;
+	return this.step;
 };
 
 // ループ回数の設定 (0:無限)
 // Set a playback loop count.  (0:infinite)
 SsSprite.prototype.setLoop = function (loop) {
 	if (loop < 0) return;
-	this._inner.loop = loop;
+	this.loop = loop;
 };
 
 // ループ回数の設定を取得
 // Get a playback loop count of specified. (0:infinite)
 SsSprite.prototype.getLoop = function () {
-	return this._inner.loop;
+	return this.loop;
 };
 
 // 現在の再生回数を取得
@@ -135,22 +136,22 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 
 	if (!this._inner.animation) return;
 
-	if (this._inner.loop === 0 || this._inner.loop > this._inner.loopCount) {
+	if (this.loop === 0 || this.loop > this._inner.loopCount) {
 		// フレームを進める
 		// To next frame.
 		if (this._inner.prevDrawnTime > 0) {
 
 			var s = (currentTime - this._inner.prevDrawnTime) / (1000 / this._inner.animation.getFPS());
-			this._inner.playingFrame += s * this._inner.step;
+			this._inner.playingFrame += s * this.step;
 
 			var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
 
-			if (this._inner.step >= 0) {
+			if (this.step >= 0) {
 				if (this._inner.playingFrame >= this._inner.animation.getFrameCount()) {
 					// ループ回数更新
 					// Update repeat count.
 					this._inner.loopCount += c;
-					if (this._inner.loop === 0 || this._inner.loopCount < this._inner.loop) {
+					if (this.loop === 0 || this._inner.loopCount < this.loop) {
 						// フレーム番号更新、再生を続ける
 						// Update frame no, and playing.
 						this._inner.playingFrame %= this._inner.animation.getFrameCount();
@@ -172,7 +173,7 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 					// ループ回数更新
 					// Update repeat count.
 					this._inner.loopCount += 1 + -c;
-					if (this._inner.loop === 0 || this._inner.loopCount < this._inner.loop) {
+					if (this.loop === 0 || this._inner.loopCount < this.loop) {
 						// フレーム番号更新、再生を続ける
 						// Update frame no, and playing.
 						this._inner.playingFrame %= this._inner.animation.getFrameCount();
