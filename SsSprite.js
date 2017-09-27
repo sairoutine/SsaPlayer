@@ -206,13 +206,13 @@ SsSprite.prototype.draw = function (ctx, currentTime) {
 
 SsSprite.prototype._initPartStates = function () {
 	this._inner.partStates = null;
+
 	if (this._inner.animation) {
+		this._inner.partStates = [];
 		var parts = this._inner.animation.getParts();
-		var states = [];
 		for (var i = 0; i < parts.length; i++) {
-			states.push(new SsPartState(parts[i]));
+			this._inner.partStates.push(new SsPartState(parts[i]));
 		}
-		this._inner.partStates = states;
 	}
 };
 
