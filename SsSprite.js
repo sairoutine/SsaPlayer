@@ -24,13 +24,21 @@ function SsSprite(animation) {
 	// プライベート変数
 	// Private variables.
 	this._inner = {
-		animation: animation,
-		playingFrame: 0,
-		prevDrawnTime: 0,
+		// 再生スピード
 		step: 1,
+		// ループ回数(0: infinite)
 		loop: 0,
+
+		// SsAnimation インスタンス
+		animation: animation,
+		// 再生フレームNo
+		playingFrame: 0,
+		// 前回描画したときの時刻(ミリ秒)(new Date().getTime() の値)
+		prevDrawnTime: 0,
+		// 何回ループしたか
 		loopCount: 0,
-		endCallBack: null,    // draw end callback
+		// draw end callback
+		endCallBack: null,
 
 		partStates: null,
 	};
