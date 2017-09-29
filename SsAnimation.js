@@ -5,6 +5,41 @@ var SsPoint = require("./SsPoint");
 // 頂点の枠をデバッグ用に表示するかどうか
 var VERBOSE = false;
 
+
+var iPartNo    = 0;
+var iImageNo   = 1;
+var iSouX      = 2;
+var iSouY      = 3;
+var iSouW      = 4;
+var iSouH      = 5;
+var iDstX      = 6;
+var iDstY      = 7;
+var iDstAngle  = 8;
+var iDstScaleX = 9;
+var iDstScaleY = 10;
+var iOrgX      = 11;
+var iOrgY      = 12;
+var iFlipH     = 13;
+var iFlipV     = 14;
+var iAlpha     = 15;
+var iBlend     = 16;
+
+var iVertULX   = 17;
+var iVertULY   = 18;
+var iVertURX   = 19;
+var iVertURY   = 20;
+var iVertDLX   = 21;
+var iVertDLY   = 22;
+var iVertDRX   = 23;
+var iVertDRY   = 24;
+
+var blendOperations = new Array(
+	"source-over",
+	"source-over",
+	"lighter",
+	"source-over"
+);
+
 /*
  * ssaData: SpriteStudio が出力したJSONデータ
  * imageList: SsImageList インスタンス
@@ -48,31 +83,6 @@ SsAnimation.prototype.getPartsMap = function () {
 // 描画メソッド
 // Draw method.
 SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, partStates, rootScaleX, rootScaleY) {
-
-	var iPartNo = 0;
-	var iImageNo = 1;
-	var iSouX = 2;
-	var iSouY = 3;
-	var iSouW = 4;
-	var iSouH = 5;
-	var iDstX = 6;
-	var iDstY = 7;
-	var iDstAngle = 8;
-	var iDstScaleX = 9;
-	var iDstScaleY = 10;
-	var iOrgX = 11;
-	var iOrgY = 12;
-	var iFlipH = 13;
-	var iFlipV = 14;
-	var iAlpha = 15;
-	var iBlend = 16;
-
-	var blendOperations = new Array(
-		"source-over",
-		"source-over",
-		"lighter",
-		"source-over"
-	);
 
 	var frameData = this._ssaData.ssa[frameNo];
 	for (var refNo = 0; refNo < frameData.length; refNo++) {
@@ -137,15 +147,6 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 
 			var ddx = dx-ox*rootScaleX;
 			var ddy = dy-oy*rootScaleY;
-
-			var iVertULX = 17;
-			var iVertULY = 18;
-			var iVertURX = 19;
-			var iVertURY = 20;
-			var iVertDLX = 21;
-			var iVertDLY = 22;
-			var iVertDRX = 23;
-			var iVertDRY = 24;
 
 			// 頂点変形座標
 			var t = [
