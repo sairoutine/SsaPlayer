@@ -49,100 +49,97 @@ SsAnimation.prototype.getPartsMap = function () {
 // 描画メソッド
 // Draw method.
 SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, partStates, rootScaleX, rootScaleY) {
-
 	var frameData = this._ssaData.ssa[frameNo];
+
 	for (var refNo = 0; refNo < frameData.length; refNo++) {
 
 		var partData = frameData[refNo];
 		var partDataLen = partData.length;
 
 		var partNo = partData[Constant.iPartNo];
+
+		// 画像
 		var img = this._imageList.getImage(partData[Constant.iImageNo]);
+
+		// 切り出し元の位置とサイズ
 		var sx = partData[Constant.iSouX];
 		var sy = partData[Constant.iSouY];
 		var sw = partData[Constant.iSouW];
 		var sh = partData[Constant.iSouH];
-		var dx = partData[Constant.iDstX] * rootScaleX;
-		var dy = partData[Constant.iDstY] * rootScaleY;
 
+		// 書き出し位置(TODO: 原点？左上？)
+		var dx = x + partData[Constant.iDstX] * rootScaleX;
+		var dy = y + partData[Constant.iDstY] * rootScaleY;
+
+		// 書き出し位置(Origin)
 		var odx = partData[Constant.iDstX];
 		var ody = partData[Constant.iDstY];
 
-
-
-		if (partNo !== 7) {
-			//continue;
-		}
-
-
-
-		var vdw = sw;
-		var vdh = sh;
-
-		dx += x;
-		dy += y;
-
-		if (sw > 0 && sh > 0) {
-			var dang = partData[Constant.iDstAngle];
-			var scaleX = partData[Constant.iDstScaleX];
-			var scaleY = partData[Constant.iDstScaleY];
-
-			var ox = (partDataLen > Constant.iOrgX) ? partData[Constant.iOrgX] : 0;
-			var oy = (partDataLen > Constant.iOrgY) ? partData[Constant.iOrgY] : 0;
-			var fh = (partDataLen > Constant.iFlipH) ? (partData[Constant.iFlipH] !== 0 ? -1 : 1) : (1);
-			var fv = (partDataLen > Constant.iFlipV) ? (partData[Constant.iFlipV] !== 0 ? -1 : 1) : (1);
-			var alpha = (partDataLen > Constant.iAlpha) ? partData[Constant.iAlpha] : 1.0;
-			var blend = (partDataLen > Constant.iBlend) ? partData[Constant.iBlend] : 0;
-
-
-			var canvas = document.createElement('canvas');
-			var canvas_size = vdw > vdh ? vdw : vdh;
-			canvas.width  = canvas_size;
-			canvas.height = canvas_size;
-			var ctx2 = canvas.getContext('2d');
-
-			ctx2.globalCompositeOperation = Constant.blendOperations[blend];
-			ctx2.globalAlpha = alpha;
-			//ctx2.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// 最終的な表示位置へ. To display the final position.
-			ctx2.rotate(-dang);
-			ctx2.scale(scaleX, scaleY);
-			ctx2.translate(vdw / 2,vdh / 2); 	// パーツの原点へ. To the origin of the parts.
-			ctx2.scale(fh, fv); 						    	// パーツの中心点でフリップ. Flip at the center point of the parts.
-
-			ctx2.drawImage(img, sx, sy, sw, sh, -vdw/2, -vdh/2, vdw, vdh);
-
-			var ddx = dx-ox*rootScaleX;
-			var ddy = dy-oy*rootScaleY;
-
-			// 頂点変形座標
-			var t = [
-				(partDataLen > Constant.iVertULX) ? partData[Constant.iVertULX] : 0,
-				(partDataLen > Constant.iVertULY) ? partData[Constant.iVertULY] : 0,
-				(partDataLen > Constant.iVertURX) ? partData[Constant.iVertURX] : 0,
-				(partDataLen > Constant.iVertURY) ? partData[Constant.iVertURY] : 0,
-				(partDataLen > Constant.iVertDLX) ? partData[Constant.iVertDLX] : 0,
-				(partDataLen > Constant.iVertDLY) ? partData[Constant.iVertDLY] : 0,
-				(partDataLen > Constant.iVertDRX) ? partData[Constant.iVertDRX] : 0,
-				(partDataLen > Constant.iVertDRY) ? partData[Constant.iVertDRY] : 0
-			];
-			var p = [
-				new SsPoint(ddx + t[0],ddy + t[1]),
-				new SsPoint(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
-				new SsPoint(ddx + t[4], canvas_size*rootScaleY + ddy + t[5]),
-				new SsPoint(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
-			];
-
-			this._drawTriangle(ctx, canvas, p);
-		}
-
-		// パーツの状態を更新
+		// パーツの位置を更新
 		var state = partStates[partNo]; // SsPartState インスタンス
 		state.x = dx;
 		state.y = dy;
+
+		// NOTE: 切り出しサイズの width or height が 0 なら描画しない
+		if (sw <= 0 || sh <= 0) return;
+
+		var dang = partData[Constant.iDstAngle];    // 回転
+		var scaleX = partData[Constant.iDstScaleX]; // 拡縮
+		var scaleY = partData[Constant.iDstScaleY]; // 〃
+
+
+		// pivot offset
+		var ox = (partDataLen > Constant.iOrgX) ? partData[Constant.iOrgX] : 0;
+		var oy = (partDataLen > Constant.iOrgY) ? partData[Constant.iOrgY] : 0;
+
+		// 反転
+		var fh = (partDataLen > Constant.iFlipH) ? (partData[Constant.iFlipH] !== 0 ? -1 : 1) : (1);
+		var fv = (partDataLen > Constant.iFlipV) ? (partData[Constant.iFlipV] !== 0 ? -1 : 1) : (1);
+
+		var alpha = (partDataLen > Constant.iAlpha) ? partData[Constant.iAlpha] : 1.0;
+		var blend = (partDataLen > Constant.iBlend) ? partData[Constant.iBlend] : 0;
+
+		// オフスクリーンレンダリング
+		var canvas = document.createElement('canvas');
+		var canvas_size = sw > sh ? sw : sh;
+		canvas.width  = canvas_size;
+		canvas.height = canvas_size;
+		var ctx2 = canvas.getContext('2d');
+
+		ctx2.globalCompositeOperation = Constant.blendOperations[blend];
+		ctx2.globalAlpha = alpha;
+		ctx2.rotate(-dang);
+		ctx2.scale(scaleX, scaleY);
+		ctx2.translate(sw / 2,sh / 2); 	// パーツの原点へ. To the origin of the parts.
+		ctx2.scale(fh, fv); // パーツの中心点でフリップ. Flip at the center point of the parts.
+		ctx2.drawImage(img, sx, sy, sw, sh, -sw/2, -sh/2, sw, sh);
+
+		var ddx = dx - ox*rootScaleX;
+		var ddy = dy - oy*rootScaleY;
+
+		// 頂点変形座標
+		var t = [
+			(partDataLen > Constant.iVertULX) ? partData[Constant.iVertULX] : 0,
+			(partDataLen > Constant.iVertULY) ? partData[Constant.iVertULY] : 0,
+			(partDataLen > Constant.iVertURX) ? partData[Constant.iVertURX] : 0,
+			(partDataLen > Constant.iVertURY) ? partData[Constant.iVertURY] : 0,
+			(partDataLen > Constant.iVertDLX) ? partData[Constant.iVertDLX] : 0,
+			(partDataLen > Constant.iVertDLY) ? partData[Constant.iVertDLY] : 0,
+			(partDataLen > Constant.iVertDRX) ? partData[Constant.iVertDRX] : 0,
+			(partDataLen > Constant.iVertDRY) ? partData[Constant.iVertDRY] : 0
+		];
+		var p = [
+			new SsPoint(ddx + t[0],                          ddy + t[1]),
+			new SsPoint(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
+			new SsPoint(ddx + t[4],                          canvas_size*rootScaleY + ddy + t[5]),
+			new SsPoint(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
+		];
+
+		this._drawTriangles(ctx, canvas, p);
 	}
 };
 
-SsAnimation.prototype._drawTriangle = function(ctx, img, p) {
+SsAnimation.prototype._drawTriangles = function(ctx, img, p) {
 	var w = img.width;
 	var h = img.height;
 	//セグメント1
