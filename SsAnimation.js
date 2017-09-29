@@ -4,7 +4,10 @@ var SsPoint = require("./SsPoint");
 var Constant = require("./constant");
 
 // 頂点の枠をデバッグ用に表示するかどうか
-var VERBOSE = true;
+var VERBOSE = false;
+
+// 特定のパーツだけデバッグ用に表示する
+var DebugPartNo = 0;
 
 /*
  * ssaData: SpriteStudio が出力したJSONデータ
@@ -58,7 +61,8 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 
 		var partNo = partData[Constant.iPartNo];
 
-//if (partNo !== 25) continue;
+		// for debug
+		if (DebugPartNo && partNo !== DebugPartNo) continue;
 
 		// 画像
 		var img = this._imageList.getImage(partData[Constant.iImageNo]);
@@ -110,9 +114,11 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 
 		ctx2.globalCompositeOperation = Constant.blendOperations[blend];
 		ctx2.globalAlpha = alpha;
+		ctx2.translate(sw / 2,sh / 2); 	// パーツの原点へ. To the origin of the parts.
+
 		ctx2.rotate(-dang);
 		ctx2.scale(scaleX, scaleY);
-		ctx2.translate(sw / 2,sh / 2); 	// パーツの原点へ. To the origin of the parts.
+		ctx2.translate(0,0); 	// パーツの原点へ. To the origin of the parts.
 		ctx2.scale(fh, fv); // パーツの中心点でフリップ. Flip at the center point of the parts.
 		ctx2.drawImage(img, sx, sy, sw, sh, -sw/2, -sh/2, sw, sh);
 
