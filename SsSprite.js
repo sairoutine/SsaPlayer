@@ -161,39 +161,44 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 	// 再生フレームNoを進める
 	// To next frame.
 	var s = this._inner.animation.getFPS() * (currentTime - this._inner.prevDrawnTime) / 1000;
+
 	this._inner.playingFrame += s * this.step;
 
+
+
+	// アニメーションの総フレーム数
+	var totalFrameCount = this._inner.animation.getFrameCount();
+
 	// この描画実行でループ回数が何回進んだか
-	var c = (this._inner.playingFrame / this._inner.animation.getFrameCount()) >> 0;
+	var c = (this._inner.playingFrame / totalFrameCount) >> 0;
 
-	if (this.step >= 0) { // 再生速度があれば
-		// TOOD: 何してる？
-		if (this._inner.playingFrame < this._inner.animation.getFrameCount()) return;
+	// 再生速度が設定されている場合、
+	if (this.step >= 0) {
+		// 全てのフレームを描画し終えた場合の処理
+		if(this._inner.playingFrame >= totalFrameCount) {
+			// ループ回数更新
+			// Update repeat count.
+			this._inner.loopCount += c;
 
-		// ループ回数更新
-		// Update repeat count.
-		this._inner.loopCount += c;
+			if ( ! this.isEndLoop()) { //再生を続ける場合
+				// フレーム番号更新、再生を続ける
+				// Update frame no, and playing.
+				this._inner.playingFrame %= totalFrameCount;
+			}
+			else { //再生が終わる場合
+				// 再生停止、最終フレームへ
+				// Stop animation, to last frame.
+				this._inner.playingFrame = totalFrameCount - 1;
 
-		if (!this.isEndLoop()) { //再生を続ける場合
-			// TOOD: 何してる？
-			// フレーム番号更新、再生を続ける
-			// Update frame no, and playing.
-			this._inner.playingFrame %= this._inner.animation.getFrameCount();
-		}
-		else { //再生が終わる場合
-			// 再生停止、最終フレームへ
-			// Stop animation, to last frame.
-			this._inner.playingFrame = this._inner.animation.getFrameCount() - 1;
-
-			// 停止時コールバック呼び出し
-			// Call finished callback.
-			if (this._inner.endCallBack) {
-				this._inner.endCallBack();
+				// 停止時コールバック呼び出し
+				// Call finished callback.
+				if (this._inner.endCallBack) {
+					this._inner.endCallBack();
+				}
 			}
 		}
 	}
 	else {
-		// TODO: 何してる？
 		if (this._inner.playingFrame >= 0) return;
 
 		// ループ回数更新
@@ -203,10 +208,10 @@ SsSprite.prototype._updatePlayingFrameNo = function (currentTime) {
 		if (!this.isEndLoop()) { //再生を続ける場合
 			// フレーム番号更新、再生を続ける
 			// Update frame no, and playing.
-			this._inner.playingFrame %= this._inner.animation.getFrameCount();
+			this._inner.playingFrame %= totalFrameCount;
 
 			if (this._inner.playingFrame < 0) {
-				this._inner.playingFrame += this._inner.animation.getFrameCount();
+				this._inner.playingFrame += totalFrameCount;
 			}
 		}
 		else { // 再生が終わる場合
