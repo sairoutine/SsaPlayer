@@ -1,12 +1,12 @@
 'use strict';
-var SsImageList = require("./SsImageList");
-var SsAnimation = require("./SsAnimation");
-var SsSprite    = require("./SsSprite");
+window.SsImageList = require("./SsImageList");
+window.SsAnimation = require("./SsAnimation");
+window.SsSprite    = require("./SsSprite");
 
 module.exports = {
-	SsImageList: SsImageList,
-	SsAnimation: SsAnimation,
-	SsSprite:    SsSprite,
+	SsImageList: window.SsImageList,
+	SsAnimation: window.SsAnimation,
+	SsSprite:    window.SsSprite,
 };
 
 // for debug
