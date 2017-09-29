@@ -48,7 +48,7 @@ SsAnimation.prototype.getPartsMap = function () {
 
 // 描画メソッド
 // Draw method.
-SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, partStates, rootScaleX, rootScaleY) {
+SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, partStates, rootScaleX, rootScaleY) {
 
 	var frameData = this._ssaData.ssa[frameNo];
 	for (var refNo = 0; refNo < frameData.length; refNo++) {
@@ -99,17 +99,17 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 			var canvas_size = vdw > vdh ? vdw : vdh;
 			canvas.width  = canvas_size;
 			canvas.height = canvas_size;
-			var ctx = canvas.getContext('2d');
+			var ctx2 = canvas.getContext('2d');
 
-			ctx.globalCompositeOperation = Constant.blendOperations[blend];
-			ctx.globalAlpha = alpha;
-			//ctx.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// 最終的な表示位置へ. To display the final position.
-			ctx.rotate(-dang);
-			ctx.scale(scaleX, scaleY);
-			ctx.translate(vdw / 2,vdh / 2); 	// パーツの原点へ. To the origin of the parts.
-			ctx.scale(fh, fv); 						    	// パーツの中心点でフリップ. Flip at the center point of the parts.
+			ctx2.globalCompositeOperation = Constant.blendOperations[blend];
+			ctx2.globalAlpha = alpha;
+			//ctx2.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// 最終的な表示位置へ. To display the final position.
+			ctx2.rotate(-dang);
+			ctx2.scale(scaleX, scaleY);
+			ctx2.translate(vdw / 2,vdh / 2); 	// パーツの原点へ. To the origin of the parts.
+			ctx2.scale(fh, fv); 						    	// パーツの中心点でフリップ. Flip at the center point of the parts.
 
-			ctx.drawImage(img, sx, sy, sw, sh, -vdw/2, -vdh/2, vdw, vdh);
+			ctx2.drawImage(img, sx, sy, sw, sh, -vdw/2, -vdh/2, vdw, vdh);
 
 			var ddx = dx-ox*rootScaleX;
 			var ddy = dy-oy*rootScaleY;
@@ -132,7 +132,7 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 				new SsPoint(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
 			];
 
-			this._drawTriangle(ctx2, canvas, p);
+			this._drawTriangle(ctx, canvas, p);
 		}
 
 		// パーツの状態を更新
