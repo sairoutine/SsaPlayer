@@ -8,3 +8,6 @@ module.exports = {
 	SsAnimation: SsAnimation,
 	SsSprite:    SsSprite,
 };
+
+// for debug
+//module.exports = require("./Official");
