@@ -1,44 +1,10 @@
 'use strict';
 
 var SsPoint = require("./SsPoint");
+var Constant = require("./constant");
 
 // 頂点の枠をデバッグ用に表示するかどうか
 var VERBOSE = false;
-
-
-var iPartNo    = 0;
-var iImageNo   = 1;
-var iSouX      = 2;
-var iSouY      = 3;
-var iSouW      = 4;
-var iSouH      = 5;
-var iDstX      = 6;
-var iDstY      = 7;
-var iDstAngle  = 8;
-var iDstScaleX = 9;
-var iDstScaleY = 10;
-var iOrgX      = 11;
-var iOrgY      = 12;
-var iFlipH     = 13;
-var iFlipV     = 14;
-var iAlpha     = 15;
-var iBlend     = 16;
-
-var iVertULX   = 17;
-var iVertULY   = 18;
-var iVertURX   = 19;
-var iVertURY   = 20;
-var iVertDLX   = 21;
-var iVertDLY   = 22;
-var iVertDRX   = 23;
-var iVertDRY   = 24;
-
-var blendOperations = new Array(
-	"source-over",
-	"source-over",
-	"lighter",
-	"source-over"
-);
 
 /*
  * ssaData: SpriteStudio が出力したJSONデータ
@@ -90,17 +56,17 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 		var partData = frameData[refNo];
 		var partDataLen = partData.length;
 
-		var partNo = partData[iPartNo];
-		var img = this._imageList.getImage(partData[iImageNo]);
-		var sx = partData[iSouX];
-		var sy = partData[iSouY];
-		var sw = partData[iSouW];
-		var sh = partData[iSouH];
-		var dx = partData[iDstX] * rootScaleX;
-		var dy = partData[iDstY] * rootScaleY;
+		var partNo = partData[Constant.iPartNo];
+		var img = this._imageList.getImage(partData[Constant.iImageNo]);
+		var sx = partData[Constant.iSouX];
+		var sy = partData[Constant.iSouY];
+		var sw = partData[Constant.iSouW];
+		var sh = partData[Constant.iSouH];
+		var dx = partData[Constant.iDstX] * rootScaleX;
+		var dy = partData[Constant.iDstY] * rootScaleY;
 
-		var odx = partData[iDstX];
-		var ody = partData[iDstY];
+		var odx = partData[Constant.iDstX];
+		var ody = partData[Constant.iDstY];
 
 
 
@@ -117,16 +83,16 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 		dy += y;
 
 		if (sw > 0 && sh > 0) {
-			var dang = partData[iDstAngle];
-			var scaleX = partData[iDstScaleX];
-			var scaleY = partData[iDstScaleY];
+			var dang = partData[Constant.iDstAngle];
+			var scaleX = partData[Constant.iDstScaleX];
+			var scaleY = partData[Constant.iDstScaleY];
 
-			var ox = (partDataLen > iOrgX) ? partData[iOrgX] : 0;
-			var oy = (partDataLen > iOrgY) ? partData[iOrgY] : 0;
-			var fh = (partDataLen > iFlipH) ? (partData[iFlipH] !== 0 ? -1 : 1) : (1);
-			var fv = (partDataLen > iFlipV) ? (partData[iFlipV] !== 0 ? -1 : 1) : (1);
-			var alpha = (partDataLen > iAlpha) ? partData[iAlpha] : 1.0;
-			var blend = (partDataLen > iBlend) ? partData[iBlend] : 0;
+			var ox = (partDataLen > Constant.iOrgX) ? partData[Constant.iOrgX] : 0;
+			var oy = (partDataLen > Constant.iOrgY) ? partData[Constant.iOrgY] : 0;
+			var fh = (partDataLen > Constant.iFlipH) ? (partData[Constant.iFlipH] !== 0 ? -1 : 1) : (1);
+			var fv = (partDataLen > Constant.iFlipV) ? (partData[Constant.iFlipV] !== 0 ? -1 : 1) : (1);
+			var alpha = (partDataLen > Constant.iAlpha) ? partData[Constant.iAlpha] : 1.0;
+			var blend = (partDataLen > Constant.iBlend) ? partData[Constant.iBlend] : 0;
 
 
 			var canvas = document.createElement('canvas');
@@ -135,7 +101,7 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 			canvas.height = canvas_size;
 			var ctx = canvas.getContext('2d');
 
-			ctx.globalCompositeOperation = blendOperations[blend];
+			ctx.globalCompositeOperation = Constant.blendOperations[blend];
 			ctx.globalAlpha = alpha;
 			//ctx.setTransform(1 * rootScaleX, 0, 0, 1 * rootScaleY, 0, 0); 	// 最終的な表示位置へ. To display the final position.
 			ctx.rotate(-dang);
@@ -150,14 +116,14 @@ SsAnimation.prototype.drawFunc = function (ctx2, frameNo, x, y, flipH, flipV, pa
 
 			// 頂点変形座標
 			var t = [
-				(partDataLen > iVertULX) ? partData[iVertULX] : 0,
-				(partDataLen > iVertULY) ? partData[iVertULY] : 0,
-				(partDataLen > iVertURX) ? partData[iVertURX] : 0,
-				(partDataLen > iVertURY) ? partData[iVertURY] : 0,
-				(partDataLen > iVertDLX) ? partData[iVertDLX] : 0,
-				(partDataLen > iVertDLY) ? partData[iVertDLY] : 0,
-				(partDataLen > iVertDRX) ? partData[iVertDRX] : 0,
-				(partDataLen > iVertDRY) ? partData[iVertDRY] : 0
+				(partDataLen > Constant.iVertULX) ? partData[Constant.iVertULX] : 0,
+				(partDataLen > Constant.iVertULY) ? partData[Constant.iVertULY] : 0,
+				(partDataLen > Constant.iVertURX) ? partData[Constant.iVertURX] : 0,
+				(partDataLen > Constant.iVertURY) ? partData[Constant.iVertURY] : 0,
+				(partDataLen > Constant.iVertDLX) ? partData[Constant.iVertDLX] : 0,
+				(partDataLen > Constant.iVertDLY) ? partData[Constant.iVertDLY] : 0,
+				(partDataLen > Constant.iVertDRX) ? partData[Constant.iVertDRX] : 0,
+				(partDataLen > Constant.iVertDRY) ? partData[Constant.iVertDRY] : 0
 			];
 			var p = [
 				new SsPoint(ddx + t[0],ddy + t[1]),
