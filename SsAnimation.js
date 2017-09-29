@@ -4,7 +4,7 @@ var SsPoint = require("./SsPoint");
 var Constant = require("./constant");
 
 // 頂点の枠をデバッグ用に表示するかどうか
-var VERBOSE = false;
+var VERBOSE = true;
 
 /*
  * ssaData: SpriteStudio が出力したJSONデータ
@@ -57,6 +57,8 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 		var partDataLen = partData.length;
 
 		var partNo = partData[Constant.iPartNo];
+
+//if (partNo !== 25) continue;
 
 		// 画像
 		var img = this._imageList.getImage(partData[Constant.iImageNo]);
@@ -114,8 +116,8 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 		ctx2.scale(fh, fv); // パーツの中心点でフリップ. Flip at the center point of the parts.
 		ctx2.drawImage(img, sx, sy, sw, sh, -sw/2, -sh/2, sw, sh);
 
-		var ddx = dx - ox*rootScaleX;
-		var ddy = dy - oy*rootScaleY;
+		var ddx = dx - ox * rootScaleX;
+		var ddy = dy - oy * rootScaleY;
 
 		// 頂点変形座標
 		var t = [
