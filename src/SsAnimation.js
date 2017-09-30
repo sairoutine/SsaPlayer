@@ -107,9 +107,8 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 
 		// オフスクリーンレンダリング
 		var canvas = document.createElement('canvas');
-		var canvas_size = sw > sh ? sw : sh;
-		canvas.width  = canvas_size;
-		canvas.height = canvas_size;
+		canvas.width  = sw;
+		canvas.height = sh;
 		var ctx2 = canvas.getContext('2d');
 
 		ctx2.globalCompositeOperation = Constant.blendOperations[blend];
@@ -137,10 +136,10 @@ SsAnimation.prototype.drawFunc = function (ctx, frameNo, x, y, flipH, flipV, par
 			(partDataLen > Constant.iVertDRY) ? partData[Constant.iVertDRY] : 0
 		];
 		var p = [
-			new SsPoint(ddx + t[0],                          ddy + t[1]),
-			new SsPoint(canvas_size*rootScaleX + ddx + t[2], ddy + t[3]),
-			new SsPoint(ddx + t[4],                          canvas_size*rootScaleY + ddy + t[5]),
-			new SsPoint(canvas_size*rootScaleX + ddx + t[6], canvas_size*rootScaleY + ddy + t[7])
+			new SsPoint(ddx + t[0],                 ddy + t[1]),
+			new SsPoint(sw*rootScaleX + ddx + t[2], ddy + t[3]),
+			new SsPoint(ddx + t[4],                 sh*rootScaleY + ddy + t[5]),
+			new SsPoint(sw*rootScaleX + ddx + t[6], sh*rootScaleY + ddy + t[7])
 		];
 
 		this._drawTriangles(ctx, canvas, p);
